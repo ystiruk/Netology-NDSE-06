@@ -1,5 +1,5 @@
 {
-  "name": "dateinfo",
+  "name": "current",
   "version": "0.0.1",
   "description": "Command line application to get current date and time",
   "main": "index.js",
@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "yargs": "^17.0.1"
+  },
+  "bin": {
+    "current": "index.js"
   }
 }
