@@ -1,0 +1,17 @@
+{
+  "name": "guess-number",
+  "version": "0.0.1",
+  "description": "Command line application to get current date and time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ystiruk",
+  "license": "ISC",
+  "dependencies": {
+    "yargs": "^17.0.1"
+  },
+  "bin": {
+    "guess-number": "index.js"
+  }
+}
