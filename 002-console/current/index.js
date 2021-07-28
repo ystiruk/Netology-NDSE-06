@@ -31,7 +31,7 @@ function getDateWithOffset(date, argv) {
     } else if (argv.month) {
         return new Date(date.setMonth(date.getMonth() + (argv.month * sign)));
     } else if (argv.day) {
-        return new Date(date.setDay(date.getDay() + (argv.day * sign)));
+        return new Date(date.setDate(date.getDate() + (argv.day * sign)));
     }
 }
 
