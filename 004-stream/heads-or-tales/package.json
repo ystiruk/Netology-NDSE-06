@@ -6,9 +6,7 @@
   "repository": "git@github.com:ystiruk/Netology-NDSE-06.git",
   "author": "ystiruk",
   "license": "ISC",
-  "dependencies": {
-    "yargs": "^17.0.1"
-  },
+  "dependencies": {},
   "bin": {
     "heads-or-tales": "index.js"
   }
