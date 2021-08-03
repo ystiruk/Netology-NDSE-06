@@ -1,13 +1,13 @@
 {
-  "name": "heads-or-tales",
+  "name": "log-reader",
   "version": "0.0.1",
-  "description": "Heads or Tales game",
+  "description": "Heads or Tales game log reader",
   "main": "index.js",
   "repository": "git@github.com:ystiruk/Netology-NDSE-06.git",
   "author": "ystiruk",
   "license": "ISC",
   "dependencies": {},
   "bin": {
-    "heads-or-tales": "index.js"
+    "log-reader": "index.js"
   }
 }
