@@ -1,12 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const {EOL} = require('os');
+const logger = require('./logger');
 const input = require('readline').createInterface(process.stdin);
 
-const _logDirectory = 'log';
+const _defaultLogDirectory = 'log';
 const _defaultLogFileName = 'head_or_tales.log';
 
-const logFile = getOrCreateLogFile(process.argv.slice(2)[0], _defaultLogFileName, _logDirectory);
+const logFileArg = process.argv.slice(2)[0];
+const logFileName = logFileArg ? logFileArg : _defaultLogFileName;
+const logFile = logger.attachLogFile(logFileName, _defaultLogDirectory);
 
 console.log("Heads or Tails game has started. To exit type 'q'.");
 process.stdout.write('Heads (1) or Tales (2)? ');
@@ -25,9 +25,9 @@ input.on('line', (line) => {
     }
 
     if (line === number) {
-        writeLog(logFile, 'yes');
+        logger.writeLog(logFile, 'yes');
     } else {
-        writeLog(logFile, 'no');
+        logger.writeLog(logFile, 'no');
     }
 
     process.stdout.write('Heads (1) or Tales (2)? ');
@@ -35,22 +35,6 @@ input.on('line', (line) => {
 
 // ---
 
-function writeLog(file, message, debug = true) {
-    if (debug) {
-        console.log(message);
-    }
-
-    fs.appendFileSync(file, `${message}${EOL}`);
-}
-
-function getOrCreateLogFile(logFileName, defaultLogFileName, directory) {
-    if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory);
-    }
-
-    const logFile = logFileName ? logFileName : defaultLogFileName;
-    return path.join(directory, logFile);
-}
 
 function getRandomInteger(min, max) {
     min = Math.ceil(min);
