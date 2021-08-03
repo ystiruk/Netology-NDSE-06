@@ -15,14 +15,16 @@ input.on('line', (line) => {
     if (line === 'q') {
         console.log('Game has ended.');
         input.close();
+        return;
     }
-
-    const number = getRandomInteger(1, 3);
 
     line = +line;
     if (isNaN(line) || line < 1 || line > 2) {
         console.log('type 1 or 2');
+        return;
     }
+    
+    const number = getRandomInteger(1, 3);
 
     if (line === number) {
         logger.writeLog(logFile, 'yes');
@@ -32,9 +34,6 @@ input.on('line', (line) => {
 
     process.stdout.write('Heads (1) or Tales (2)? ');
 });
-
-// ---
-
 
 function getRandomInteger(min, max) {
     min = Math.ceil(min);
