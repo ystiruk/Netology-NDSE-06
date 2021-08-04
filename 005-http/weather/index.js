@@ -1,6 +1,7 @@
+const config = require('./config.js');
 const http = require('http');
 
-const API_KEY = process.env.WeatherstackAPIKey;
+const API_KEY = config.WeatherstackAPIKey;
 const city = process.argv.slice(2)[0];
 if (!city) {
     console.error("First argument 'city' required. ");
