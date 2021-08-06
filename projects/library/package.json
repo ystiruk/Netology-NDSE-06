@@ -1,0 +1,19 @@
+{
+  "name": "library",
+  "version": "0.0.1",
+  "description": "Library",
+  "main": "index.js",
+  "repository": "git@github.com:ystiruk/Netology-NDSE-06.git",
+  "author": "ystiruk",
+  "license": "ISC",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "bin": {
+    "weather": "index.js"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12"
+  }
+}
