@@ -1,15 +1,15 @@
 const config = require('./config');
+const {
+    Book
+} = require('./model');
 const express = require('express');
 
+const library = {
+    books: []
+};
+
 const app = express();
-
-app.get('/api', (req, res) => {
-    const body = {
-        version: 'api version 0.0.1',
-    };
-
-    res.send(body);
-});
+app.use(express.json());
 
 app.post('/api/user/login', (req, res) => {
     res.status(201).json({
@@ -19,24 +19,39 @@ app.post('/api/user/login', (req, res) => {
 });
 
 app.get('/api/books/', (req, res) => {
-    res.send(`POST /api/books/`);
+    res.status(200).json(library.books);
 });
+
 app.get('/api/books/:id', (req, res) => {
     const {
         id
     } = req.params;
-    res.send(`GET /api/books/${id}`);
+    const bookIndex = library.books.findIndex(x => x.id === id);
+    if (bookIndex !== -1) {
+        res.status(200).json(library.books[bookIndex]);
+    } else {
+        res.status(404).json();
+    }
 });
 
 app.post('/api/books/', (req, res) => {
     res.send(`POST /api/books/`);
 });
+
 app.put('/api/books/:id', (req, res) => {
     const {
         id
     } = req.params;
-    res.send(`PUT /api/books/${id}`);
+    const bookIndex = library.books.findIndex(x => x.id === id);
+    if (bookIndex !== -1) {
+        res.status(200).json(library.books[bookIndex]);
+    } else {
+        res.status(404).json();
+    }
+    //TODO: parse body, save
+    //const { body }  = req;
 });
+
 app.delete('/api/books/:id', (req, res) => {
     const {
         id
