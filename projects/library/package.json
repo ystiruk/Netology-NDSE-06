@@ -10,7 +10,7 @@
     "dev": "nodemon index.js"
   },
   "bin": {
-    "weather": "index.js"
+    "library": "index.js"
   },
   "devDependencies": {
     "express": "^4.17.1",
