@@ -8,7 +8,7 @@ const library = {
     books: []
 };
 
-router.get('/', (req, res) => {
+router.get('/', (_, res) => {
     res.status(200).json(library.books);
 });
 
