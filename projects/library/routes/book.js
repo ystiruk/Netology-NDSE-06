@@ -4,6 +4,8 @@ const idGenerator = require('node-unique-id-generator');
 const express = require('express');
 const router = express.Router();
 
+const fileMiddleware = require('../middleware/file');
+
 const library = {
     books: []
 };
