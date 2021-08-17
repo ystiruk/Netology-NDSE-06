@@ -3,8 +3,9 @@ const fs = require('fs');
 const express = require('express');
 
 const indexRouter = require('./routes/index');
-const bookRouter = require('./routes/api/book');
-const userRouter = require('./routes/api/user');
+const bookRouter = require('./routes/book');
+const bookApiRouter = require('./routes/api/book');
+const userApiRouter = require('./routes/api/user');
 
 ensureProjectStructureCreated();
 
@@ -13,8 +14,9 @@ app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use('/', indexRouter);
-app.use('/api/books/', bookRouter);
-app.use('/api/user/', userRouter);
+app.use('/books/', bookRouter);
+app.use('/api/books/', bookApiRouter);
+app.use('/api/user/', userApiRouter);
 
 app.listen(config.port);
 
