@@ -1,12 +1,12 @@
 const path = require('path');
-const config = require('../config');
+const config = require('../../config');
 const { randomUUID } = require('crypto');
-const Book = require('../models/Book');
+const Book = require('../../models/Book');
 
 const express = require('express');
 const router = express.Router();
 
-const fileMiddleware = require('../middleware/file');
+const fileMiddleware = require('../../middleware/file');
 
 const library = {
     books: []
