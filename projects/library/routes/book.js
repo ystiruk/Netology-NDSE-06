@@ -1,4 +1,4 @@
-const idGenerator = require('node-unique-id-generator');
+const { randomUUID } = require('crypto');
 const Book = require('../models/Book');
 
 const express = require('express');
@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     const { title, description, authors, favorite, fileCover, fileName } = req.body;
-    const id = idGenerator.generateGUID();
+    const id = randomUUID();
     const newBook = new Book(id, title, description, authors, favorite, fileCover, fileName);
     library.books.push(newBook);
 
