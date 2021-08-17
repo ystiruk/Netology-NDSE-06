@@ -1,9 +1,15 @@
 const multer = require('multer');
 const config = require('../config');
+const path = require('path');
 
 const storage = multer.diskStorage({
     destination(req, file, cb) {
         cb(null, config.uploadDir);
+    },
+    //TODO: make name unique, but keep the extension
+    filename(req, file, cb) {
+        const extension = path.extname(file.originalname);
+        cb(null, file.originalname);
     }
 });
 

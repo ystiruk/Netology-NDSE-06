@@ -1,3 +1,5 @@
+const path = require('path');
+const config = require('../config');
 const { randomUUID } = require('crypto');
 const Book = require('../models/Book');
 
@@ -19,6 +21,24 @@ router.get('/:id', (req, res) => {
     const bookIndex = library.books.findIndex(x => x.id === id);
     if (bookIndex !== -1) {
         res.status(200).json(library.books[bookIndex]);
+    } else {
+        res.status(404).json();
+    }
+});
+
+router.get('/:id/download', (req, res) => {
+    const { id } = req.params;
+    const bookIndex = library.books.findIndex(x => x.id === id);
+    if (bookIndex !== -1) {
+
+        const pseudoName = randomUUID();
+        const rootDirectory = path.join(__dirname, '../');
+        const fullName = path.join(rootDirectory, config.uploadDir, library.books[bookIndex].fileBook);
+        const extenstion = path.extname(fullName);
+
+        res.status(200).download(fullName, `${pseudoName}${extenstion}`, err => {
+            res.status(404).json();
+        });
     } else {
         res.status(404).json();
     }
