@@ -63,6 +63,7 @@ router.post('/:id/upload', fileMiddleware.single('bookFile'), (req, res) =>
             return res.status(422).send('Please select a .txt or .pdf to upload');
         }
 
+        //TODO: consider deletion of an old file when rewrite OR throwing an error
         library.books[bookIndex].fileBook = req.file.filename;
         res.status(201).json();
     }
