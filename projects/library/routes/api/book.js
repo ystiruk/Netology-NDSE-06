@@ -8,9 +8,7 @@ const router = express.Router();
 
 const fileMiddleware = require('../../middleware/file');
 
-const library = {
-    books: []
-};
+const library = require('../../library');
 
 router.get('/', (_, res) => {
     res.status(200).json(library.books);
