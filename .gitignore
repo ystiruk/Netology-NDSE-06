@@ -1,3 +1,6 @@
+# Ignore all uploads
+upload/
+
 # Logs
 logs
 *.log
