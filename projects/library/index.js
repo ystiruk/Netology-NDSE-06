@@ -13,6 +13,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.use(express.json());
+app.use(express.urlencoded());
 app.use('/', indexRouter);
 app.use('/books/', bookRouter);
 app.use('/api/books/', bookApiRouter);
