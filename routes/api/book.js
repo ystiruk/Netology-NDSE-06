@@ -30,7 +30,7 @@ router.get('/:id/download', (req, res) => {
     if (bookIndex !== -1) {
 
         const pseudoName = randomUUID();
-        const rootDirectory = path.join(__dirname, '../');
+        const rootDirectory = path.join(__dirname, '../../');
         const fullName = path.join(rootDirectory, config.uploadDir, library.books[bookIndex].fileBook);
         const extenstion = path.extname(fullName);
 
