@@ -16,6 +16,7 @@
 
 1) запрос(ы) для *вставки* данных минимум о двух книгах в коллекцию **books**
 
+```javascript
 db.books.insertOne(
   {
     title: "The Catcher in the Rye",
@@ -30,16 +31,21 @@ db.books.insertOne(
     authors: "Stephen King"
   }
 );
+```
 
 2) запрос для *поиска* полей документов коллекции **books** по полю *title*
 
+```javascript
 db.books.find(
   { title: "Misery" }
 );
+```
 
 3) запрос для *редактирования* полей: *description* и *authors* коллекции **books** по *_id* записи
 
+```javascript
 db.books.UpdateOne(
   { _id: "bookId" },
   { $set: { description: "New description", authors: "New authors" } }
 );
+```
