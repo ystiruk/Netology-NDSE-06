@@ -1,6 +1,7 @@
 const config = require('./config');
 const fs = require('fs');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
 const bookRouter = require('./routes/book');
@@ -13,7 +14,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded());
 app.use('/', indexRouter);
 app.use('/books/', bookRouter);
 app.use('/api/books/', bookApiRouter);
