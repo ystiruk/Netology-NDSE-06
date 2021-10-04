@@ -20,7 +20,9 @@ app.use('/books/', bookRouter);
 app.use('/api/books/', bookApiRouter);
 app.use('/api/user/', userApiRouter);
 
-app.listen(config.port);
+app.listen(config.PORT, () => {
+    console.log(`=== start server PORT ${config.PORT} ===`);
+});
 
 ///
 
