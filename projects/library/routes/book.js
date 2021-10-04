@@ -1,61 +1,85 @@
 const Book = require('../models/Book');
-const idGenerator = require('node-unique-id-generator');
-
+const { randomUUID } = require('crypto');
 const express = require('express');
 const router = express.Router();
 
-const fileMiddleware = require('../middleware/file');
+const library = require('../library');
 
-const library = {
-    books: []
-};
+router.get('/', (req, res) => {
+    res.render("book/index", {
+        title: "Library",
+        books: library.books
+    });
+});
 
-router.get('/', (_, res) => {
-    res.status(200).json(library.books);
+router.get('/create', (req, res) => {
+    res.render("book/create", {
+        title: "Add book",
+        book: {}
+    });
+});
+router.post('/create', (req, res) => {
+    const { title, description, authors } = req.body;
+    const id = randomUUID();
+    const newBook = new Book(id, title, description, authors, '', '', '');
+    library.books.push(newBook);
+
+    res.redirect('/books');
 });
 
 router.get('/:id', (req, res) => {
-    const { id } = req.params;
+    const {id} = req.params;
     const bookIndex = library.books.findIndex(x => x.id === id);
+
     if (bookIndex !== -1) {
-        res.status(200).json(library.books[bookIndex]);
+        res.render("book/view", {
+            title: "View book",
+            book: library.books[bookIndex],
+        });
     } else {
-        res.status(404).json();
+        res.status(404).redirect('/404');
     }
 });
 
-router.post('/', (req, res) => {
-    const { title, description, authors, favorite, fileCover, fileName, fileBook } = req.body;
-    const id = idGenerator.generateGUID();
-    const newBook = new Book(id, title, description, authors, favorite, fileCover, fileName, fileBook);
-    library.books.push(newBook);
+router.get('/update/:id', (req, res) => {
+    const {id} = req.params;
+    const bookIndex = library.books.findIndex(x => x.id === id);
 
-    res.status(201).json(newBook);
+    if (bookIndex !== -1) {
+        res.render("book/update", {
+            title: "Update book",
+            book: library.books[bookIndex],
+        });
+    } else {
+        res.status(404).redirect('/404');
+    }
 });
-
-router.put('/:id', (req, res) => {
+router.post('/update/:id', (req, res) => {
     const { id } = req.params;
+    const { title, description, authors } = req.body;
+    
     const bookIndex = library.books.findIndex(x => x.id === id);
     if (bookIndex !== -1) {
-        const { title, description, authors, favorite, fileCover, fileName, fileBook } = req.body;
         library.books[bookIndex] = {
             ...library.books[bookIndex],
-            title, description, authors, favorite, fileCover, fileName, fileBook
+            title,
+            description,
+            authors
         };
-        res.status(200).json(library.books[bookIndex]);
+        res.redirect(`/books`);
     } else {
-        res.status(404).json();
+        res.status(404).redirect('/404');
     }
 });
 
-router.delete('/:id', (req, res) => {
+router.post('/delete/:id', (req, res) => {
     const { id } = req.params;
     const bookIndex = library.books.findIndex(x => x.id === id);
     if (bookIndex !== -1) {
         library.books.splice(bookIndex, 1);
-        res.status(204).send(`ok`);
+        res.redirect('/books');
     } else {
-        res.status(404).json();
+        res.status(404).redirect('/404');
     }
 });
 
