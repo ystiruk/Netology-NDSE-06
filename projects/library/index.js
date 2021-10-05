@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const config = require('./config');
 const fs = require('fs');
 const express = require('express');
@@ -20,14 +21,24 @@ app.use('/books/', bookRouter);
 app.use('/api/books/', bookApiRouter);
 app.use('/api/user/', userApiRouter);
 
-app.listen(config.PORT, () => {
-    console.log(`=== start server PORT ${config.PORT} ===`);
-});
+start();
 
 ///
 
 function ensureProjectStructureCreated() {
     if (!fs.existsSync(config.uploadDir)) {
         fs.mkdirSync(config.uploadDir, { recursive: true });
+    }
+}
+
+async function start() {
+    try {
+        //await mongoose.connect('mongodb://localhost:27017/books_database');
+        
+        app.listen(config.PORT, () => {
+            console.log(`=== start server PORT ${config.PORT} ===`);
+        });
+    } catch (e) {
+        console.log(e);
     }
 }
