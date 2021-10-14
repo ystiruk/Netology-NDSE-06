@@ -1,98 +1,79 @@
 const path = require('path');
 const config = require('../../config');
 const { randomUUID } = require('crypto');
-const Book = require('../../models/Book');
+const Book = require('../../models/book');
 
 const express = require('express');
 const router = express.Router();
 
 const fileMiddleware = require('../../middleware/file');
 
-const library = require('../../library');
-
-router.get('/', (_, res) => {
-    res.status(200).json(library.books);
+router.get('/', async (_, res) => {
+    const books = await Book.find().select('-__v');
+    res.status(200).json(books);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const bookIndex = library.books.findIndex(x => x.id === id);
-    if (bookIndex !== -1) {
-        res.status(200).json(library.books[bookIndex]);
-    } else {
-        res.status(404).json();
-    }
-});
-
-router.get('/:id/download', (req, res) => {
-    const { id } = req.params;
-    const bookIndex = library.books.findIndex(x => x.id === id);
-    if (bookIndex !== -1) {
-
-        const pseudoName = randomUUID();
-        const rootDirectory = path.join(__dirname, '../');
-        const fullName = path.join(rootDirectory, config.uploadDir, library.books[bookIndex].fileBook);
-        const extenstion = path.extname(fullName);
-
-        res.status(200).download(fullName, `${pseudoName}${extenstion}`, err => {
+    
+    try {
+        const book = await Book.findById(id).select('-__v');
+        if (book === null) {
             res.status(404).json();
-        });
-    } else {
-        res.status(404).json();
-    }
-});
-
-router.post('/', (req, res) => {
-    const { title, description, authors, favorite, fileCover, fileName } = req.body;
-    const id = randomUUID();
-    const newBook = new Book(id, title, description, authors, favorite, fileCover, fileName);
-    library.books.push(newBook);
-
-    res.status(201).json(newBook);
-});
-
-router.post('/:id/upload', fileMiddleware.single('bookFile'), (req, res) =>
-{
-    const { id } = req.params;
-    const bookIndex = library.books.findIndex(x => x.id === id);
-    if (bookIndex !== -1) {
-        if (!req.file) {
-            //TODO: move error description to middleware
-            return res.status(422).send('Please select a .txt or .pdf to upload');
+        } else {
+            res.status(200).json(book);
         }
-
-        //TODO: consider deletion of an old file when rewrite OR throwing an error
-        library.books[bookIndex].fileBook = req.file.filename;
-        res.status(201).json();
-    }
-    else {
-        res.status(404).json();
+    } catch (e) {
+        console.error(e);
+        res.status(500).json();
     }
 });
 
-router.put('/:id', (req, res) => {
+router.post('/', async (req, res) => {
+    const { title, description, authors, favorite, fileCover, fileName } = req.body;
+    const newBook = new Book({
+        title, 
+        description, 
+        authors, 
+        favorite, 
+        fileCover, 
+        fileName
+    });
+    
+    try {
+        await newBook.save();
+        res.status(201).json(newBook);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json();
+    }
+
+});
+
+router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const bookIndex = library.books.findIndex(x => x.id === id);
-    if (bookIndex !== -1) {
-        const { title, description, authors, favorite, fileCover, fileName } = req.body;
-        library.books[bookIndex] = {
-            ...library.books[bookIndex],
+    const { title, description, authors, favorite, fileCover, fileName } = req.body;
+
+    try {
+        await Book.findByIdAndUpdate(id, {
             title, description, authors, favorite, fileCover, fileName
-        };
-        res.status(200).json(library.books[bookIndex]);
-    } else {
-        res.status(404).json();
+        });
+        res.redirect(`/api/books/${id}`);
+    } catch(e) {
+        console.error(e);
+        res.status(500).json();
     }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
     const { id } = req.params;
-    const bookIndex = library.books.findIndex(x => x.id === id);
-    if (bookIndex !== -1) {
-        library.books.splice(bookIndex, 1);
-        res.status(204).send(`ok`);
-    } else {
-        res.status(404).json();
+    
+    try {
+        await Book.deleteOne({ '_id': id });
+        res.send('ok');
+    } catch(e) {
+        console.error(e);
+        res.status(500).json();
     }
 });
 
