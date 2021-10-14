@@ -34,6 +34,13 @@ function ensureProjectStructureCreated() {
 async function start() {
     try {
         //await mongoose.connect('mongodb://localhost:27017/books_database');
+        await mongoose.connect(config.HOST_DB, {
+            user: config.USER_DB,
+            pass: config.PASSWORD_DB,
+            dbName: config.NAME_DB,
+            userNewUrlParser: true,
+            useUnifiedTopology: true
+        });
         
         app.listen(config.PORT, () => {
             console.log(`=== start server PORT ${config.PORT} ===`);
